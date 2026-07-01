@@ -1,13 +1,24 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 
 const ProductCard = ({ product }) => {
+  const fallbackImage = 'https://via.placeholder.com/200x200?text=No+Image'
+  const [imageSrc, setImageSrc] = useState(product.image)
+
+  const handleImageError = (event) => {
+    if (imageSrc !== fallbackImage) {
+      setImageSrc(fallbackImage)
+      event.currentTarget.onerror = null
+    }
+  }
+
   return (
     <div className="card h-100">
       <img
-        src={product.image}
+        src={imageSrc}
         className="card-img-top p-3"
         alt={product.title}
+        onError={handleImageError}
         style={{ height: 200, objectFit: 'contain' }}
       />
       <div className="card-body d-flex flex-column">
