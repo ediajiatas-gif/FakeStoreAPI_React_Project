@@ -6,6 +6,10 @@ const initialState = {
   items: persistedCart ? JSON.parse(persistedCart) : [],
 };
 
+const saveCartToSession = (items) => {
+  sessionStorage.setItem('cart', JSON.stringify(items));
+};
+
 const cartSlice = createSlice({
   name: 'cart',
   initialState,
@@ -19,11 +23,11 @@ const cartSlice = createSlice({
         state.items.push({ ...action.payload, count: 1 });
       }
 
-      sessionStorage.setItem('cart', JSON.stringify(state.items));
+      saveCartToSession(state.items);
     },
     removeFromCart: (state, action) => {
       state.items = state.items.filter((item) => item.id !== action.payload);
-      sessionStorage.setItem('cart', JSON.stringify(state.items));
+      saveCartToSession(state.items);
     },
     updateCount: (state, action) => {
       const { id, count } = action.payload;
@@ -37,11 +41,11 @@ const cartSlice = createSlice({
         item.count = count;
       }
 
-      sessionStorage.setItem('cart', JSON.stringify(state.items));
+      saveCartToSession(state.items);
     },
     clearCart: (state) => {
       state.items = [];
-      sessionStorage.setItem('cart', JSON.stringify(state.items));
+      saveCartToSession(state.items);
     },
   },
 });

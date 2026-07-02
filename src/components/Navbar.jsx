@@ -26,6 +26,9 @@ const AppNavbar = () => {
             <Nav.Link as={NavLink} to="/add-product">
               Add Product
             </Nav.Link>
+            <Nav.Link as={NavLink} to="/cart">
+              Cart
+            </Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Container>

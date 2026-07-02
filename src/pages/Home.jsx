@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useQuery } from '@tanstack/react-query';
+import { useDispatch } from 'react-redux';
 import { Container, Row, Col, Card, Button, Alert } from 'react-bootstrap';
 import CategorySelect from '../components/CategorySelect';
+import { addToCart } from '../features/cart/cartSlice';
 
 const fetchProducts = async () => {
   const response = await axios.get('https://fakestoreapi.com/products');
@@ -16,6 +18,15 @@ const fetchProductsByCategory = async (category) => {
 
 const Home = () => {
   const [selectedCategory, setSelectedCategory] = useState('');
+  const dispatch = useDispatch();
+
+  const handleImageError = (event) => {
+    const placeholder = 'https://via.placeholder.com/200x200?text=No+Image';
+    if (event.currentTarget.src !== placeholder) {
+      event.currentTarget.src = placeholder;
+      event.currentTarget.onerror = null;
+    }
+  };
 
   const { data, isLoading, error } = useQuery({
     queryKey: ['products', selectedCategory],
@@ -55,6 +66,7 @@ const Home = () => {
                   variant="top"
                   src={product.image}
                   alt={product.title}
+                  onError={handleImageError}
                   style={{ height: '220px', objectFit: 'contain', padding: '1rem' }}
                 />
                 <Card.Body className="d-flex flex-column">
@@ -63,7 +75,11 @@ const Home = () => {
                   <Card.Text>{product.description}</Card.Text>
                   <Card.Text className="fw-bold">${product.price}</Card.Text>
                   <Card.Text>Rate: {product.rating?.rate}</Card.Text>
-                  <Button variant="primary" className="mt-auto">
+                  <Button
+                    variant="primary"
+                    className="mt-auto"
+                    onClick={() => dispatch(addToCart(product))}
+                  >
                     Add to Cart
                   </Button>
                 </Card.Body>
