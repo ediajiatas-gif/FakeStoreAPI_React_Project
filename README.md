@@ -1,16 +1,24 @@
-# React + Vite
+FakeStore React E-Commerce App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A React e-commerce app built with the FakeStore API, React Query, and Redux Toolkit.
 
-Currently, two official plugins are available:
+Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
 
-## React Compiler
+Browse all products on the Home page, fetched live via React Query
+Filter products by category using a dynamic dropdown (categories pulled from the API, not hardcoded)
+Add products to a shopping cart from the Home page
+View, update, and remove items in the Shopping Cart
+Cart persists across page refreshes using sessionStorage
+Live total item count and total price
+Simulated checkout that clears the cart and shows a confirmation message
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
 
-## Expanding the ESLint configuration
+Tech Stack
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+
+React
+React Query (@tanstack/react-query)
+Redux Toolkit
+React Bootstrap
+Axios
