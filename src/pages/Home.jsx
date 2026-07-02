@@ -1,17 +1,32 @@
-import React from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import { useQuery } from '@tanstack/react-query';
 import { Container, Row, Col, Card, Button, Alert } from 'react-bootstrap';
+import CategorySelect from '../components/CategorySelect';
 
 const fetchProducts = async () => {
   const response = await axios.get('https://fakestoreapi.com/products');
   return response.data;
 };
 
+const fetchProductsByCategory = async (category) => {
+  const response = await axios.get(`https://fakestoreapi.com/products/category/${category}`);
+  return response.data;
+};
+
 const Home = () => {
+  const [selectedCategory, setSelectedCategory] = useState('');
+
   const { data, isLoading, error } = useQuery({
-    queryKey: ['products'],
-    queryFn: fetchProducts,
+    queryKey: ['products', selectedCategory],
+    queryFn: () => {
+      if (!selectedCategory || selectedCategory === 'all') {
+        return fetchProducts();
+      }
+
+      return fetchProductsByCategory(selectedCategory);
+    },
+    enabled: selectedCategory !== undefined,
   });
 
   const products = data || [];
@@ -22,6 +37,11 @@ const Home = () => {
         <h1 className="mb-3">Featured Products</h1>
         <p className="text-muted">Browse our latest items from the FakeStore API.</p>
       </div>
+
+      <CategorySelect
+        selectedCategory={selectedCategory}
+        onCategoryChange={setSelectedCategory}
+      />
 
       {isLoading && <Alert variant="info">Loading products...</Alert>}
       {error && <Alert variant="danger">Failed to load products.</Alert>}
