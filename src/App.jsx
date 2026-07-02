@@ -6,6 +6,8 @@ import ProductDetail from "./pages/ProductDetail";
 import ProductList from "./pages/ProductList";
 import ShoppingCart from "./components/ShoppingCart";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { auth } from "./firebase";
+
 
 function App() {
   return (
