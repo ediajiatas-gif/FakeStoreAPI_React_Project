@@ -7,16 +7,18 @@ import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+// Your web app's Firebase configuration uses Vite environment variables.
+// Make sure these are defined in a local .env file and not committed.
+
+// Secrets were being exposed so I had copilot help me move firebase config to enviornent variables
 const firebaseConfig = {
-  apiKey: "AIzaSyAiEUnGT6uvy5zWZm9K6c5saWrve3l9xws",
-  authDomain: "e-commerce-app-fe917.firebaseapp.com",
-  projectId: "e-commerce-app-fe917",
-  storageBucket: "e-commerce-app-fe917.firebasestorage.app",
-  messagingSenderId: "55516234018",
-  appId: "1:55516234018:web:c7617bfa244d1489c8257b",
-  measurementId: "G-JZ1V56HPMK"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
 };
 
 // Initialize Firebase
