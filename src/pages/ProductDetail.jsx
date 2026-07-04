@@ -2,23 +2,12 @@
 
 // Uses useParams() to extract the product ID from the URL.
 
-// Fetches the product data from FakeStoreAPI (https://fakestoreapi.com/products/:id).
-
-// Displays:
-
-// Product image, title, description, category, and price.
-
-// Button to add the product to a cart (cart functionality is optional).
-
-// Button to delete the product (removes it from the API).
-
-// Handles loading states and error messages.
-
-// Note: FakeStoreAPI will return a success response to DELETE requests, but the product will not actually be removed from the API. This is expected behavior for a mock testing API.
+// Displays detailed information for a single product fetched from Firestore.
 
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import ProductDetailCard from "../components/ProductDetailCard";
+import { getProduct, deleteProduct } from "../lib/productService";
 
 const ProductDetail = () => {
   const { id } = useParams();
@@ -33,12 +22,8 @@ const ProductDetail = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const response = await fetch(`https://fakestoreapi.com/products/${id}`);
-        if (!response.ok) {
-          throw new Error("Error fetching product");
-        }
-        const data = await response.json();
-        setProduct(data);
+        const data = await getProduct(id);
+        setProduct(data || {});
         setLoading(false);
       } catch (err) {
         setError(err.message || "Error fetching product");
@@ -56,12 +41,7 @@ const ProductDetail = () => {
   const handleConfirmDelete = async () => {
     setIsDeleting(true);
     try {
-      const response = await fetch(`https://fakestoreapi.com/products/${id}`, {
-        method: "DELETE",
-      });
-      if (!response.ok) {
-        throw new Error("Failed to delete product");
-      }
+      await deleteProduct(id);
       setSuccessMessage("Product deleted successfully!");
       setShowDeleteModal(false);
       setTimeout(() => {

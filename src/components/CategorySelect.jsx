@@ -1,17 +1,12 @@
 import React from "react";
-import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import { Form } from "react-bootstrap";
-
-const fetchCategories = async () => {
-  const response = await axios.get("https://fakestoreapi.com/products/categories");
-  return response.data;
-};
+import { getCategories } from "../lib/productService";
 
 const CategorySelect = ({ selectedCategory, onCategoryChange }) => {
   const { data: categories = [], isLoading, error } = useQuery({
     queryKey: ["categories"],
-    queryFn: fetchCategories,
+    queryFn: getCategories,
   });
 
   return (

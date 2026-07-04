@@ -1,24 +1,7 @@
-// A form to create a new product using FakeStoreAPI (POST request).
-
-// The form should include fields for:
-
-// Product title
-
-// Price
-
-// Description
-
-// Category
-
-// Submitting the form should send data to FakeStoreAPI.
-
-// Displays a confirmation message when the product is "created."
-
-// Note: FakeStoreAPI will return a successful response to your POST request, allowing you to test how your app handles product creation. However, the new product will not actually be saved or appear in the product list on future API calls, since this API is for testing purposes only.
-
-// Uses React Bootstrap form components.
+// A form to create a new product and save it to Firestore.
 import React, { useState } from 'react';
 import { Container, Form, Button, Alert } from 'react-bootstrap';
+import { createProduct } from '../lib/productService';
 
 const AddProduct = () => {
   const [product, setProduct] = useState({
@@ -43,22 +26,12 @@ const AddProduct = () => {
     setError('');
 
     try {
-      const response = await fetch('https://fakestoreapi.com/products', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          title: product.title,
-          price: parseFloat(product.price),
-          description: product.description,
-          category: product.category,
-        }),
+      await createProduct({
+        title: product.title,
+        price: parseFloat(product.price),
+        description: product.description,
+        category: product.category,
       });
-
-      if (!response.ok) {
-        throw new Error('Failed to create product.');
-      }
-
-      await response.json();
       setSubmitted(true);
       setProduct({ title: '', price: '', description: '', category: '' });
     } catch (submitError) {

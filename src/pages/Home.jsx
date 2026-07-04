@@ -1,20 +1,12 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import { useQuery } from '@tanstack/react-query';
 import { useDispatch } from 'react-redux';
 import { Container, Row, Col, Card, Button, Alert } from 'react-bootstrap';
 import CategorySelect from '../components/CategorySelect';
+import { getAllProducts } from '../lib/productService';
 import { addToCart } from '../features/cart/cartSlice';
 
-const fetchProducts = async () => {
-  const response = await axios.get('https://fakestoreapi.com/products');
-  return response.data;
-};
-
-const fetchProductsByCategory = async (category) => {
-  const response = await axios.get(`https://fakestoreapi.com/products/category/${category}`);
-  return response.data;
-};
+// products are loaded from Firestore
 
 const Home = () => {
   const [selectedCategory, setSelectedCategory] = useState('');
@@ -31,22 +23,21 @@ const Home = () => {
   const { data, isLoading, error } = useQuery({
     queryKey: ['products', selectedCategory],
     queryFn: () => {
-      if (!selectedCategory || selectedCategory === 'all') {
-        return fetchProducts();
-      }
-
-      return fetchProductsByCategory(selectedCategory);
+      return getAllProducts();
     },
     enabled: selectedCategory !== undefined,
   });
 
-  const products = data || [];
+  const allProducts = data || [];
+  const products = selectedCategory
+    ? allProducts.filter((p) => p.category === selectedCategory)
+    : allProducts;
 
   return (
     <Container className="py-4">
       <div className="text-center mb-4">
         <h1 className="mb-3">Featured Products</h1>
-        <p className="text-muted">Browse our latest items from the FakeStore API.</p>
+        <p className="text-muted">Browse our latest items.</p>
       </div>
 
       <CategorySelect

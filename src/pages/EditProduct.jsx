@@ -1,16 +1,9 @@
-// Allows users to update an existing product (PUT request to FakeStoreAPI).
-
-// Pre-fills the form with the existing product data.
-
-// Submitting the form should update the product on the API.
-
-// Displays a success message after updating.
-
-// Note: While FakeStoreAPI will respond as if the update succeeded, the changes will not persist if you refresh or fetch the data again. This is expected behavior for a mock API used in testing.
+// Edit an existing product stored in Firestore.
 
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Form, Button, Alert } from 'react-bootstrap';
+import { getProduct, updateProduct } from '../lib/productService';
 
 const EditProduct = () => {
   const { id } = useParams();
@@ -34,16 +27,12 @@ const EditProduct = () => {
       setFetchError('');
 
       try {
-        const response = await fetch(`https://fakestoreapi.com/products/${id}`);
-        if (!response.ok) {
-          throw new Error('Failed to load product.');
-        }
-        const data = await response.json();
+        const data = await getProduct(id);
         setProduct({
-          title: data.title || '',
-          price: data.price?.toString() || '',
-          description: data.description || '',
-          category: data.category || '',
+          title: data?.title || '',
+          price: data?.price?.toString() || '',
+          description: data?.description || '',
+          category: data?.category || '',
         });
       } catch (error) {
         setFetchError(error.message || 'Error fetching product.');
@@ -70,24 +59,13 @@ const EditProduct = () => {
     setIsUpdating(true);
 
     try {
-      const response = await fetch(`https://fakestoreapi.com/products/${id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          title: product.title,
-          price: parseFloat(product.price),
-          description: product.description,
-          category: product.category,
-        }),
+      await updateProduct(id, {
+        title: product.title,
+        price: parseFloat(product.price),
+        description: product.description,
+        category: product.category,
       });
 
-      if (!response.ok) {
-        throw new Error('Failed to update product.');
-      }
-
-      await response.json();
       setSuccessMessage('Product updated successfully.');
     } catch (error) {
       setSubmitError(error.message || 'Error updating product.');

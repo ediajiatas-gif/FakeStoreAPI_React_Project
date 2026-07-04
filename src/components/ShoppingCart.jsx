@@ -1,7 +1,11 @@
+// ShoppingCart.jsx
+
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Alert, Button, Card, Col, Container, ListGroup, Row } from 'react-bootstrap';
 import { clearCart, removeFromCart } from '../features/cart/cartSlice';
+import { createOrder } from '../lib/orderService';
+import { auth } from '../lib/firebase';
 
 const ShoppingCart = () => {
   const dispatch = useDispatch();
@@ -12,13 +16,27 @@ const ShoppingCart = () => {
   const totalPrice = items.reduce((sum, item) => sum + item.price * item.count, 0);
 
   const handleCheckout = () => {
-    dispatch(clearCart());
-    sessionStorage.removeItem('cart');
-    setCheckoutSuccess(true);
+    const doCheckout = async () => {
+      if (!auth.currentUser) {
+        alert('Please log in to place an order.');
+        return;
+      }
 
-    window.setTimeout(() => {
-      setCheckoutSuccess(false);
-    }, 3000);
+      try {
+        await createOrder(auth.currentUser.uid, items, totalPrice);
+        dispatch(clearCart());
+        sessionStorage.removeItem('cart');
+        setCheckoutSuccess(true);
+        window.setTimeout(() => {
+          setCheckoutSuccess(false);
+        }, 3000);
+      } catch (err) {
+        console.error('Checkout error:', err);
+        alert('Failed to place order.');
+      }
+    };
+
+    doCheckout();
   };
 
   return (

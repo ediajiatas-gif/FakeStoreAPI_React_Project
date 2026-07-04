@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import ProductCard from "../components/ProductCard";
 import CategorySelect from "../components/CategorySelect";
+import { getAllProducts } from "../lib/productService";
 
 const ProductList = () => {
   const [products, setProducts] = useState([]);
@@ -11,9 +12,7 @@ const ProductList = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch("https://fakestoreapi.com/products");
-        if (!response.ok) throw new Error("Network response was not ok");
-        const data = await response.json();
+        const data = await getAllProducts();
         setProducts(data);
       } catch (err) {
         console.error("Error fetching products:", err);
