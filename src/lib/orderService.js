@@ -26,7 +26,7 @@ export const getUserOrders = async (userId) => {
   return result.docs.map((item) => ({ id: item.id, ...item.data() }));
 };
 
-// Get a single order by id
+// Get a single order by its id
 export const getOrder = async (orderId) => {
   const orderRef = doc(db, "orders", orderId);
   const result = await getDoc(orderRef);
@@ -34,6 +34,6 @@ export const getOrder = async (orderId) => {
   if (result.exists()) {
     return { id: result.id, ...result.data() };
   } else {
-    return null;
+    return null; 
   }
 };
