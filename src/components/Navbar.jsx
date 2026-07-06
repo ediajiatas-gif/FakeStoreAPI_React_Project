@@ -2,8 +2,9 @@
 // Includes links to Home, Product Listing, and Add Product pages.
 // Uses React Bootstrap for responsive mobile behavior.
 // Navbar.jsx
+// Navbar.jsx
 import React from 'react';
-import { NavLink, Link } from 'react-router-dom';
+import { NavLink, Link, useNavigate } from 'react-router-dom';
 import Navbar from 'react-bootstrap/Navbar';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
@@ -11,8 +12,11 @@ import { signOut } from 'firebase/auth';
 import { auth } from '../lib/firebase';
 
 const AppNavbar = ({ user }) => {
-  const handleLogout = () => {
-    signOut(auth);
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    await signOut(auth);
+    navigate('/login'); // send them to the login page after logging out
   };
 
   return (

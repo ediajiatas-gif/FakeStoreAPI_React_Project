@@ -1,10 +1,12 @@
 // Register.jsx
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc, serverTimestamp } from "firebase/firestore";
 import { auth, db } from "../lib/firebase";
 
 const Register = () => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [displayName, setDisplayName] = useState("");
@@ -23,7 +25,7 @@ const Register = () => {
         createdAt: serverTimestamp(),
       });
 
-      alert("Registration successful!");
+      navigate("/profile"); 
     } catch (err) {
       setError(err.message);
     }
