@@ -16,7 +16,7 @@ jobs:
       - name: Use Node.js 18
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
 
       - name: Install dependencies
         run: npm install --legacy-peer-deps
@@ -28,7 +28,7 @@ jobs:
         run: npm test -- --watchAll=false
   deploy:
     runs-on: ubuntu-latest
-    needs: build #on;y run deploy after the build job has succeeded
+    needs: build #only run deploy after the build job has succeeded
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
