@@ -1,7 +1,15 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { addToCart } from '../features/cart/cartSlice'
 
 const ProductDetailCard = ({ product, onDelete, isDeleting }) => {
+  const dispatch = useDispatch()
+
+  const handleAddToCart = () => {
+    dispatch(addToCart(product))
+  }
+
   return (
     <div className="card">
       <img
@@ -24,7 +32,9 @@ const ProductDetailCard = ({ product, onDelete, isDeleting }) => {
           <h5 className="fw-bold">${product.price?.toFixed(2)}</h5>
         </div>
         <div className="d-flex gap-2">
-          <button className="btn btn-success flex-grow-1">Add to Cart</button>
+          <button className="btn btn-success flex-grow-1" onClick={handleAddToCart}>
+            Add to Cart
+          </button>
 
           <Link
             to={`/edit-product/${product.id}`}
